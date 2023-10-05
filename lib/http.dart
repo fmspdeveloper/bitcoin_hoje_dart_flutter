@@ -3,20 +3,34 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
-class paginaInicial extends StatefulWidget {
-  const paginaInicial({super.key});
+class paginaHttp extends StatefulWidget {
+  const paginaHttp({super.key});
 
   @override
-  State<paginaInicial> createState() => _paginaInicialState();
+  State<paginaHttp> createState() => _paginaHttpState();
 }
 
-class _paginaInicialState extends State<paginaInicial> {
-  void _navegarHttp() {
-    Navigator.pushNamed(context, "/pagina-http");
+class _paginaHttpState extends State<paginaHttp> {
+  var bitcoin = "";
+
+  void _receberDados() async {
+    String url = "https://blockchain.info/ticker";
+    Uri uri = Uri.parse(url);
+
+    http.Response response;
+    response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      setState(() {
+        bitcoin =
+            NumberFormat.currency(locale: 'pt_BR').format(data["BRL"]["sell"]);
+      });
+    }
   }
 
-  void _navegarFuture() {
-    Navigator.pushNamed(context, "/pagina-future");
+  void _homePage() {
+    Navigator.pushNamed(context, "/pagina-inicio");
   }
 
   @override
@@ -37,10 +51,17 @@ class _paginaInicialState extends State<paginaInicial> {
               child: Image.asset("images/bitcoin.png"),
             ),
             Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                "${bitcoin}",
+                style: TextStyle(fontSize: 30),
+              ),
+            ),
+            Padding(
               padding: EdgeInsets.all(15),
               child: ElevatedButton(
-                onPressed: _navegarHttp,
-                child: Text("Exemplo HTTP"),
+                onPressed: _receberDados,
+                child: Text("Atualizar"),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(200, 50),
                   backgroundColor: Colors.orange,
@@ -50,8 +71,8 @@ class _paginaInicialState extends State<paginaInicial> {
             Padding(
               padding: EdgeInsets.all(15),
               child: ElevatedButton(
-                onPressed: _navegarFuture,
-                child: Text("Exemplo Future"),
+                onPressed: _homePage,
+                child: Text("Inicio"),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(200, 50),
                   backgroundColor: Colors.orange,
@@ -62,5 +83,6 @@ class _paginaInicialState extends State<paginaInicial> {
         ),
       ),
     );
+    ;
   }
 }
