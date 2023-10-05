@@ -18,6 +18,9 @@ class _paginaInicialState extends State<paginaInicial> {
   void _navegarFuture() {
     Navigator.pushNamed(context, "/pagina-future");
   }
+  void _navegarDados() {
+    Navigator.pushNamed(context, "/pagina-dados");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +55,17 @@ class _paginaInicialState extends State<paginaInicial> {
               child: ElevatedButton(
                 onPressed: _navegarFuture,
                 child: Text("Exemplo Future"),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(200, 50),
+                  backgroundColor: Colors.orange,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(15),
+              child: ElevatedButton(
+                onPressed: _navegarDados,
+                child: Text("Dados em Lista"),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(200, 50),
                   backgroundColor: Colors.orange,
